@@ -1,0 +1,26 @@
+package com.projetojpa.config;
+
+@Configuration
+public class SpringSecurityConfig {
+	
+	@Bean
+	public SegurityFliterChain filterChain (HttpSecurity http) throws Exception{
+		http.authorizeHttpRequests((requests) -> requests
+		.requestMatchers("/aluno/")
+		//.anyRequest()
+		.authenticated()
+	)
+	
+	.httpBasic();
+	return http.build();
+	}
+	@Bean
+	public InMemoryUserDetailsManager userDetailsService() {
+		UserDetails user = User.withDefaultPasswordEncoder()
+				.username("giovana")
+				.password ("senai")
+				.build();
+		return new InMemoryUserDetailsManager(user);
+	}
+
+}

@@ -14,79 +14,85 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projetojpa.entities.Aluno;
 import com.projetojpa.entities.Turma;
 import com.projetojpa.service.TurmaService;
 
 import jakarta.validation.Valid;
 
-@RestController
-@RequestMapping ("/turma")
-
+@RestController 
+@RequestMapping("/turma") 
 public class TurmaController {
+	private final TurmaService TurmaService; 
 
-private final TurmaService TurmaService;
-	
-	@Autowired
-	public TurmaController (TurmaService TurmaService) {
-		this.TurmaService = TurmaService;
-	}
-	
-	@GetMapping ("/{id}")
-	public ResponseEntity<Turma> getTurmaControlId (@PathVariable Long id) {
-		Turma Turma = TurmaService.getTurmaById(id);
-		if (Turma != null) {
-			
-		}
-		return ResponseEntity.notFound().build();
-	}
-
-	@GetMapping ("/nome/{nome}")
-	public ResponseEntity<List<Turma>> buscarTurmaPorNome (@PathVariable String nome){
+	@Autowired 
+	public TurmaController(TurmaService TurmaService) { 
+		this.TurmaService = TurmaService; 
+	} 
+	//Query Method
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<List<Turma>> buscarTurmaPorNome(@PathVariable  String nome){
 		List<Turma> turmas = TurmaService.buscarTurmaPorNome(nome);
 		return ResponseEntity.ok(turmas);
 	}
-	
-	@GetMapping ("/descricao/{descricao}")
-	public ResponseEntity<List<Turma>> buscarTurmaPorDescricao (@PathVariable String descricao){
-		List<Turma> turmas = TurmaService.buscarTurmaPorNome(descricao);
+	//Query Method
+	@GetMapping("/descricao/{descricao}")
+	public ResponseEntity<List<Turma>> buscarTurmaPorDescricao(@PathVariable  String descricao){
+		List<Turma> turmas = TurmaService.buscarTurmaPorDescricao(descricao);
 		return ResponseEntity.ok(turmas);
 	}
-	
-	
-	@GetMapping ()
-	public ResponseEntity <List<Turma>> getAllTurmaControl () {
-		List<Turma> Turma = TurmaService.getAllTurma();
-		return ResponseEntity.ok(Turma);
-}
-	
-	
-	@PostMapping
-	public ResponseEntity <Turma> saveTurmaControl(@RequestBody @Valid Turma Turma) {
-		Turma saveTurma = TurmaService.saveTurma(Turma);
-		return ResponseEntity.status(HttpStatus.CREATED).body(saveTurma);
-}
-	@PutMapping ("/{id}")
-	public ResponseEntity <Turma> putTurmaControl(@PathVariable Long id, @RequestBody @Valid Turma Turma){
-		Turma putTurma = TurmaService.putTurma(id, Turma);
-		if (putTurma != null) {
-			return ResponseEntity.ok(Turma);
-		}
-		else {
-			return ResponseEntity.notFound().build();
-		}
+	//Query Method
+	@GetMapping("/nome/{nome}/descricao/{descricao}")
+	public ResponseEntity<List<Turma>> buscarNomeEDescricao(@PathVariable  String nome, @PathVariable  String descricao){
+		List<Turma> turmas = TurmaService.buscarNomeEDescricao(nome, descricao);
+		return ResponseEntity.ok(turmas);
 	}
-	
-	@DeleteMapping ("/{id}")
-	public ResponseEntity <Turma> deleteTurmaControl (@PathVariable Long id) {
-		boolean delete = TurmaService.deleteTurma(id);
-		if (delete) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}
-		else {
-			return ResponseEntity.notFound().build();
 
-		
-}
-}
-}
+
+	@GetMapping("/{id}") 
+	public ResponseEntity<Turma> buscaTurmaControlId(@PathVariable Long id){ 
+		Turma Turma = TurmaService.getTurmaById(id); 
+		if (Turma != null) { 
+			return ResponseEntity.ok(Turma); 
+		} 
+
+		else { 
+			return ResponseEntity.notFound().build(); 
+		} 
+
+	} 
+
+	@GetMapping("/") 
+	public ResponseEntity<List<Turma>> buscaTodosTurmasControl(){ 
+		List<Turma> Turma = TurmaService.getAllTurma(); 
+		return ResponseEntity.ok(Turma); 
+	} 
+
+	@PostMapping("/") 
+	public ResponseEntity<Turma> salvaTurmasControl(@RequestBody @Valid Turma Turma){ 
+		Turma salvaTurma = TurmaService.salvarTurma(Turma); 
+		return ResponseEntity.status(HttpStatus.CREATED).body(salvaTurma); 
+	} 
+
+	@PutMapping("/{id}") 
+	public ResponseEntity<Turma> alteraTurmasControl(@PathVariable Long id, @RequestBody @Valid Turma Turma){ 
+		Turma alteraTurma = TurmaService.updateTurma(id, Turma); 
+		if (alteraTurma != null) { 
+			return ResponseEntity.ok(Turma); 
+		} 
+
+		else { 
+			return ResponseEntity.notFound().build(); 
+		} 
+	} 
+	@DeleteMapping("/{id}") 
+	public ResponseEntity<String> apagaTurmaControl(@PathVariable Long id){ 
+		boolean apagar = TurmaService.deleteTurma(id); 
+		if(apagar) { 
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); 
+		} 
+
+		else {
+			return ResponseEntity.notFound().build(); 
+		} 
+	} 
+} 

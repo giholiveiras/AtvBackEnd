@@ -1,0 +1,5 @@
+package com.projetojpa.config;
+
+public class SpringSecurityConfig {
+
+}

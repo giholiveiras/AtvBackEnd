@@ -1,59 +1,64 @@
 package com.projetojpa.service;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.projetojpa.entities.Aluno;
 import com.projetojpa.entities.Turma;
 import com.projetojpa.repository.TurmaRepository;
 
+
 @Service
-
 public class TurmaService {
-
+	
 	private final TurmaRepository TurmaRepository;
-
+	
 	@Autowired
 	public TurmaService (TurmaRepository TurmaRepository) {
 		this.TurmaRepository = TurmaRepository;
 	}
-
-	public List<Turma> getAllTurma () {
-		return TurmaRepository.findAll();
-	}
-	public Turma getTurmaById (Long id) {
-		Optional<Turma> Turma = TurmaRepository.findById(id);
-		return Turma.orElse(null);
-	}
-	
-	public List<Turma> buscarTurmaPorNome(String nome){
-		return TurmaRepository.findByNome(nome);
-	}
-	
-	public List<Turma> buscarTurmaPorDescricao(String descricao){
-		return TurmaRepository.findByDescricao(descricao);
-	}
-
-	public Turma saveTurma(Turma Turma) {
-		return TurmaRepository.save(Turma);
-	}
-
-	public Turma putTurma(Long id, Turma alterarC) {
-		Optional <Turma> existeTurma = TurmaRepository.findById(id);
-		if (existeTurma.isPresent()) {
-			alterarC.setId(id);
-			return TurmaRepository.save(alterarC);
+	//Query Method
+		public List<Turma> buscarTurmaPorNome(String nome){
+			return TurmaRepository.findByNome(nome);
 		}
-		return null;
-	}
-
-	public boolean deleteTurma(Long id) {
-		Optional <Turma> existeTurma = TurmaRepository.findById(id);
-		if (existeTurma.isPresent()) {
-			TurmaRepository.deleteById(id);
-			return true;
+	//Query Method
+		public List<Turma> buscarTurmaPorDescricao(String descricao){
+			return TurmaRepository.findByDescricao(descricao);
 		}
-		return false;
+	//Query Method
+		public List<Turma> buscarNomeEDescricao(String nome, String descricao){
+			return TurmaRepository.findByNomeAndDescricao(nome, descricao);
+		}
+	
+	    public List<Turma> getAllTurma() {
+	        return TurmaRepository.findAll();
+	    }
+
+	    public Turma getTurmaById(Long id) {
+	        Optional<Turma> Turma = TurmaRepository.findById(id);
+	        return Turma.orElse(null);
+	    }
+
+	    public Turma salvarTurma(Turma Turma) {
+	        return TurmaRepository.save(Turma);
+	    }
+
+	    public Turma updateTurma(Long id, Turma updatedTurma) {
+	        Optional<Turma> existingTurma = TurmaRepository.findById(id);
+	        if (existingTurma.isPresent()) {
+	            updatedTurma.setId(id);
+	            return TurmaRepository.save(updatedTurma);
+	        }
+	        return null;
+	    }
+	    public boolean deleteTurma(Long id) {
+	        Optional<Turma> existingTurma = TurmaRepository.findById(id);
+	        if (existingTurma.isPresent()) {
+	        	TurmaRepository.deleteById(id);
+	            return true;
+	        }
+	        return false;
+	    }
+
 	}
-}
